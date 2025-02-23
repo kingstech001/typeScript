@@ -23,10 +23,10 @@ type User = {
   ): (T extends 'user' ? User[] : Admin[]) {
     return persons.filter(person => {
       if (person.type !== personType) return false;
-      return Object.keys(criteria).every(key => {
-        return (person as any)[key] === (criteria as any)[key];
+      return (Object.entries(criteria) as [keyof typeof criteria, any][]).every(([key, value]) => {
+        return person[key as keyof Person] === value;
       });
-    }) as any;
+    }) as (T extends 'user' ? User[] : Admin[]);
   }
   
   // Example usage
